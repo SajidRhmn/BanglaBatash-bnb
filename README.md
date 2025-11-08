@@ -1,5 +1,5 @@
 # BanglaBatash BNB 🏡
-
+[!!!Currently under development!!!]
 A full-stack Airbnb-inspired vacation rental platform built with Node.js, Express, MongoDB, and EJS. BanglaBatash BNB allows users to browse, create, edit, and manage property listings for short-term vacation rentals.
 
 ## 🌟 Features
@@ -25,59 +25,10 @@ A full-stack Airbnb-inspired vacation rental platform built with Node.js, Expres
 - **HTML5 & CSS3**: Structure and styling
 - **Method-Override**: Support for PUT and DELETE HTTP methods in forms
 
-## 📋 Prerequisites
 
-Before running this project, make sure you have the following installed:
 
-- [Node.js](https://nodejs.org/) (v14 or higher)
-- [MongoDB](https://www.mongodb.com/try/download/community) (v4.4 or higher)
-- npm (comes with Node.js)
 
-## 🚀 Installation & Setup
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/yourusername/BanglaBatash-BNB.git
-   cd BanglaBatash-BNB
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Start MongoDB**
-
-   Make sure MongoDB is running on your local machine:
-   ```bash
-   # On Windows (if installed as a service, it runs automatically)
-   # Or start manually:
-   mongod
-   ```
-
-4. **Seed the database** (Optional - adds sample listings)
-   ```bash
-   node init/index.js
-   ```
-
-5. **Start the application**
-   ```bash
-   node app.js
-   ```
-
-   Or with nodemon for auto-restart during development:
-   ```bash
-   nodemon app.js
-   ```
-
-6. **Access the application**
-
-   Open your browser and navigate to:
-   ```
-   http://localhost:9090
-   ```
-
-## 📁 Project Structure
+## 📁 Project Structure [So far]
 
 ```
 BanglaBatash-BNB/
@@ -123,31 +74,6 @@ BanglaBatash-BNB/
 }
 ```
 
-## 🌱 Sample Data
-
-The project includes 30 pre-configured sample listings from various locations worldwide, including:
-- Beach cottages
-- Mountain retreats
-- City lofts
-- Historic villas
-- Luxury penthouses
-- And more!
-
-## 🔧 Configuration
-
-### Database Configuration
-The MongoDB connection URL is configured in `app.js`:
-```javascript
-const MONGO_URL = 'mongodb://127.0.0.1:27017/BanglaBatash_BNB';
-```
-
-### Port Configuration
-The server runs on port 9090 by default. You can change this in `app.js`:
-```javascript
-app.listen(9090, () => {
-    console.log("App is listening on port 9090")
-})
-```
 
 ## 🎯 Usage
 
@@ -173,16 +99,6 @@ app.listen(9090, () => {
 2. Click "Delete"
 3. The listing will be removed from the database
 
-## 🤝 Contributing
-
-Contributions, issues, and feature requests are welcome! Feel free to check the issues page.
-
-1. Fork the project
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
 ## 📝 Future Enhancements
 
 - [ ] User authentication and authorization
@@ -196,14 +112,10 @@ Contributions, issues, and feature requests are welcome! Feel free to check the 
 - [ ] Favorite/Wishlist feature
 - [ ] Advanced styling with Bootstrap/Tailwind CSS
 
-## 📄 License
-
-This project is licensed under the ISC License.
 
 ## 👨‍💻 Author
 
-Your Name
-- GitHub: [@yourusername](https://github.com/yourusername)
+Mohammad Sazidur Rahman
 
 ## 🙏 Acknowledgments
 
@@ -213,4 +125,4 @@ Your Name
 
 ---
 
-**Note**: This is a learning project and is not intended for production use without additional security and feature implementations.
+**Note**: This is a learning project 
