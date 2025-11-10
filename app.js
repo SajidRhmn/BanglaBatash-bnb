@@ -4,11 +4,15 @@ const mongoose = require("mongoose");
 const path = require("path");
 const Listing = require("./models/listing.js");
 const methodOverride = require("method-override")
+const ejsMate = require("ejs-mate")
+
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 app.use(express.urlencoded({extended : true}));
-app.use(methodOverride("_method"))
+app.use(methodOverride("_method"));
+app.engine("ejs", ejsMate);
+app.use(express.static(path.join(__dirname, "/public")));
 
 // mongoose startup
 const MONGO_URL = 'mongodb://127.0.0.1:27017/BanglaBatash_BNB';
@@ -27,7 +31,7 @@ async function main() {
 
 
 app.get("/", (req, res) => {
-    res.send("Working get root")
+    res.send("Working home er get root")
 })
 
 
@@ -69,8 +73,6 @@ app.get("/listings/new", (req, res) => {
 
 // Create route - handle form submission
 app.post("/listings", async (req, res) => {
-    console.log("=== POST /listings route hit ===");
-    console.log("Full req.body:", req.body);
 
     // Handle both nested (listing.title) and flat (title) data structures
     const listingData = req.body.listing || req.body;
@@ -86,7 +88,7 @@ app.post("/listings", async (req, res) => {
 })
 
 
-// Edit Route
+// Update - Edit Route
 app.get("/listings/:id/edit", async (req, res) => {
     let {id} = req.params;
     const listing = await Listing.findById(id);
@@ -96,7 +98,7 @@ app.get("/listings/:id/edit", async (req, res) => {
 
 
 
-// Put req route for edit 
+// Update - Put req route for edit 
 app.put("/listings/:id", async (req, res) => {
     let {id} = req.params; 
     await Listing.findByIdAndUpdate(id, {...req.body.listing});
@@ -114,7 +116,7 @@ app.delete("/listing/:id", async (req, res) => {
 })
 
 
-// Show route - individual listing (MUST come after /listings/new)
+// Show/read route - individual listing (MUST come after /listings/new)
 app.get("/listings/:id", async (req, res) => {
     let {id} = req.params;
     let listing = await Listing.findById(id);
