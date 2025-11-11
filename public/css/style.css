@@ -1,6 +1,6 @@
-/* body{
-    background-color: pink;
-} */
+body{
+    font-family: "Plus Jakarta Sans", sans-serif  !important;
+}
 
 
 /* Navbar */
@@ -126,4 +126,48 @@ footer {
     width: 80%;
     text-align: center;
   }
+}
+
+
+
+.listing_link{
+  text-decoration: none ;
+}
+
+
+
+/* Card Container Styling */
+.card {
+  border: none !important;           /* Remove default Bootstrap card border */
+  margin-bottom: 2rem;               /* Add 2rem space below each card */
+}
+
+/* Card Image Styling */
+.card-img-top {
+  border-radius: 1rem !important;    /* Round the corners of the image (16px) */
+  width: 100% !important;            /* Make image fill full card width */
+  object-fit: cover !important;      /* Crop/scale image to fill container without distortion */
+}
+
+/* Card Body (Content Area) Styling */
+.card-body {
+  padding: 0 !important;             /* Remove all padding inside card body */
+}
+
+/* Card Text Paragraph Styling */
+.card-text p {
+  font-weight: 400;                  /* Set text weight to normal/regular (400) */
+}
+
+
+
+
+/* Card Effect */
+.card-img-overlay {
+  opacity: 0;
+}
+
+.card-img-overlay:hover {
+  opacity: 0.2;
+  background-color: white;
 }
