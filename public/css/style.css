@@ -11,7 +11,12 @@ body{
 
 
 /* add button from new.ejs*/
-.add_btn{
+.add_btn {
+  background-color: #fe424d !important;
+  border: none !important;
+}
+
+.edit-btn{
   background-color: #fe424d !important;
   border: none !important;
 }
@@ -184,4 +189,21 @@ footer {
 .card-img-overlay:hover {
   opacity: 0.2;
   background-color: white;
+}
+
+
+
+
+
+/*Show page*/
+
+.show-img{
+  height: 40vh;
+  width: 20vh;
+  
+}
+
+.btns{
+  display : flex;
+  
 }

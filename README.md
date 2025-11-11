@@ -1,5 +1,6 @@
 # BanglaBatash BNB 🏡
 [!!!Currently under development!!!]
+
 A full-stack Airbnb-inspired vacation rental platform built with Node.js, Express, MongoDB, and EJS. BanglaBatash BNB allows users to browse, create, edit, and manage property listings for short-term vacation rentals.
 
 ## 🌟 Features
