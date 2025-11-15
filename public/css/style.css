@@ -19,6 +19,25 @@ body{
 .edit-btn{
   background-color: #fe424d !important;
   border: none !important;
+  display: inline-block;
+  padding: 0.375rem 0.75rem !important;
+  line-height: 1.5 !important;
+  vertical-align: middle;
+  font-size: 1rem !important;
+  height: 38px !important;
+  box-sizing: border-box !important;
+}
+
+.del-btn{
+  background-color: #4d4243 !important;
+  border: none !important;
+  display: inline-block;
+  padding: 0.375rem 0.75rem !important;
+  line-height: 1.5 !important;
+  vertical-align: middle;
+  font-size: 1rem !important;
+  height: 38px !important;
+  box-sizing: border-box !important;
 }
 
 
@@ -156,7 +175,7 @@ footer {
 
 
 /* Card Container Styling */
-.card {
+.listing-card {
   border: none !important;           /* Remove default Bootstrap card border */
   margin-bottom: 2rem;               /* Add 2rem space below each card */
 }

@@ -3,11 +3,12 @@ const app = express();
 const mongoose = require("mongoose");
 const path = require("path");
 const Listing = require("./models/listing.js");
+const Review = require("./models/review.js");
 const methodOverride = require("method-override")
 const ejsMate = require("ejs-mate")
 const wrapAsync = require("./utilis/wrapAsync.js")
 const ExpressError = require("./utilis/ExpressError.js")
-const {listingSchema} = require("./schema.js")
+const {listingSchema, reviewSchema} = require("./schema.js")
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -62,6 +63,20 @@ const validateListing = (req, res, next) => {
         next();
     }
 };
+
+
+
+const validateReview = (req, res, next) => {
+    let { error } = reviewSchema.validate(req.body);
+    if (error) {
+        let errMsg = error.details.map((el) => el.message).join(","); // Note: The screenshot shows "," not ";"
+        throw new ExpressError(400, errMsg);
+    } else {
+        next();
+    }
+};
+
+
 
 
 
@@ -129,7 +144,7 @@ app.put("/listings/:id",
 
 
 // Delete route
-app.delete("/listing/:id", async (req, res) => {
+app.delete("/listings/:id", async (req, res) => {
     let {id} = req.params;
     let deletedListing = await Listing.findByIdAndDelete(id);
     console.log(deletedListing);
@@ -137,23 +152,62 @@ app.delete("/listing/:id", async (req, res) => {
 })
 
 
+// Reviews er POST Route
+app.post("/listings/:id/reviews", validateReview, wrapAsync(async (req, res) => {
+    let listing = await Listing.findById(req.params.id);
+    let newReview = new Review(req.body.review);
+
+    listing.reviews.push(newReview);
+
+    await newReview.save();
+    await listing.save();
+
+
+    res.redirect(`/listings/${listing._id}`);
+}));
+
+
+
+
+// Delete reviews route
+app.delete("/listings/:id/reviews/:reviewId", wrapAsync(async (req, res) => {
+    let {id, reviewId} = req.params;
+
+    await Listing.findByIdAndUpdate(id, {$pull : {reviews : reviewId}});
+    await Review.findByIdAndDelete(reviewId);
+
+    res.redirect(`/listings/${id}`);
+}));
+
+
+
+
+
 // Show/read route - individual listing (MUST come after /listings/new)
-app.get("/listings/:id", async (req, res) => {
+app.get("/listings/:id", wrapAsync(async (req, res) => {
     let {id} = req.params;
-    let listing = await Listing.findById(id);
+    let listing = await Listing.findById(id).populate("reviews");
 
     res.render("show.ejs", {listing});
-})
+}));
+
+
+
+
 
 app.use((req, res, next) => {
     next(new ExpressError(404, "Page Not Found!"));
 });
+
+
 
 app.use((err, req, res, next) => {
     let { statusCode = 500, message = "Something went wrong!" } = err;
     // res.status(statusCode).send(message);
     res.status(statusCode).render("error.ejs", {err})
 });
+
+
 
 // Start server - must be at the end after all routes
 app.listen(9090, () => {
