@@ -8,7 +8,7 @@
     <h3>Create a New Listing</h3>
     <br><br>
 
-<form method="POST" action="/listings">
+<form method="POST" action="/listings" novalidate class="needs-validation">
   <div class="mb-3">
     <label for="title" class="form-label">Title</label>
     <input
@@ -16,12 +16,20 @@
       placeholder="enter title"
       type="text"
       class="form-control"
+      required
     />
+    <div class="valid-feedback">Title looks good!</div>
+    <div class="invalid-feedback">Please enter a Title.</div>
   </div>
 
   <div class="mb-3">
     <label for="description" class="form-label">Description</label>
-    <textarea name="listing[description]" class="form-control"></textarea>
+    <textarea 
+    name="listing[description]" 
+    class="form-control"
+    required>
+    </textarea>
+    <div class="invalid-feedback">Please enter description.</div>
   </div>
 
   <div class="mb-3">
@@ -43,7 +51,9 @@
           placeholder="enter price"
           type="number"
           class="form-control"
+          required
         />
+        <div class="invalid-feedback">Please enter a valid Price.</div>
       </div>
     
       <div class="mb-3 col-md-8">
@@ -53,7 +63,9 @@
           placeholder="enter country"
           type="text"
           class="form-control"
+          required
         />
+        <div class="invalid-feedback">Please enter the country name.</div>
       </div>
     
   </div>
@@ -61,7 +73,13 @@
 
   <div class="mb-3">
     <label for="location" class="form-label">Location</label>
-    <input name="listing[location]" placeholder="enter location" type="text" class="form-control" />
+    <input 
+    name="listing[location]" 
+    placeholder="enter location" 
+    type="text" class="form-control" 
+    required
+    />
+    <div class="invalid-feedback">Please enter a valid Location.</div>
   </div>
 
   <br /><br />

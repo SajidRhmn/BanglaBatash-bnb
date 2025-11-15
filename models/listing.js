@@ -23,6 +23,7 @@ const listingSchema = new Schema({
 
       price : {
         type : Number,
+        required : true
       }, 
 
       location : {
