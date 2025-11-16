@@ -9,6 +9,9 @@ const ejsMate = require("ejs-mate")
 const wrapAsync = require("./utilis/wrapAsync.js")
 const ExpressError = require("./utilis/ExpressError.js")
 const {listingSchema, reviewSchema} = require("./schema.js")
+const listings = require("./routes/listing.js")
+const reviews = require("./routes/review.js")
+
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -54,142 +57,14 @@ app.get("/", (req, res) => {
 //     res.send("Successful Data insertion");
 // });
 
-const validateListing = (req, res, next) => {
-    let { error } = listingSchema.validate(req.body);
-    if (error) {
-        let errMsg = error.details.map((el) => el.message).join(","); // Note: The screenshot shows "," not ";"
-        throw new ExpressError(400, errMsg);
-    } else {
-        next();
-    }
-};
-
-
-
-const validateReview = (req, res, next) => {
-    let { error } = reviewSchema.validate(req.body);
-    if (error) {
-        let errMsg = error.details.map((el) => el.message).join(","); // Note: The screenshot shows "," not ";"
-        throw new ExpressError(400, errMsg);
-    } else {
-        next();
-    }
-};
 
 
 
 
 
-// Index route - show all listings
-app.get("/listings", async (req, res) => {
-    let allListings = await Listing.find({});
-    console.log(allListings)
-    res.render("listing.ejs", {allListings});
-})
 
-
-
-
-// New route - show form (MUST come before :id route)
-app.get("/listings/new", (req, res) => {
-    res.render("new.ejs");
-})
-
-
-
-
-// Create route - handle form submission
-app.post("/listings", 
-    validateListing,
-    wrapAsync( async (req, res) => {
-
-    // Handle both nested (listing.title) and flat (title) data structures
-    const listingData = req.body.listing || req.body;
-    // console.log("listingData:", listingData);
-    // Create new listing and save to database
-    const newListing = new Listing(listingData);
-    await newListing.save();
-
-    console.log("New listing saved:", newListing);
-    res.redirect("/listings");
-
-    
-
-
-}));
-
-
-// Update - Edit Route
-app.get("/listings/:id/edit", async (req, res) => {
-    
-
-    let {id} = req.params;
-    const listing = await Listing.findById(id);
-
-    res.render("edit.ejs", {listing});
-})
-
-
-
-// Update - Put req route for edit 
-app.put("/listings/:id", 
-    validateListing,
-    wrapAsync(async (req, res) => {
-
-    let {id} = req.params; 
-    await Listing.findByIdAndUpdate(id, {...req.body.listing});
-    res.redirect("/listings");
-
-}));
-
-
-// Delete route
-app.delete("/listings/:id", async (req, res) => {
-    let {id} = req.params;
-    let deletedListing = await Listing.findByIdAndDelete(id);
-    console.log(deletedListing);
-    res.redirect("/listings")
-})
-
-
-// Reviews er POST Route
-app.post("/listings/:id/reviews", validateReview, wrapAsync(async (req, res) => {
-    let listing = await Listing.findById(req.params.id);
-    let newReview = new Review(req.body.review);
-
-    listing.reviews.push(newReview);
-
-    await newReview.save();
-    await listing.save();
-
-
-    res.redirect(`/listings/${listing._id}`);
-}));
-
-
-
-
-// Delete reviews route
-app.delete("/listings/:id/reviews/:reviewId", wrapAsync(async (req, res) => {
-    let {id, reviewId} = req.params;
-
-    await Listing.findByIdAndUpdate(id, {$pull : {reviews : reviewId}});
-    await Review.findByIdAndDelete(reviewId);
-
-    res.redirect(`/listings/${id}`);
-}));
-
-
-
-
-
-// Show/read route - individual listing (MUST come after /listings/new)
-app.get("/listings/:id", wrapAsync(async (req, res) => {
-    let {id} = req.params;
-    let listing = await Listing.findById(id).populate("reviews");
-
-    res.render("show.ejs", {listing});
-}));
+app.use("/listings", listings);
+app.use("/listings/:id/reviews", reviews);
 
 
 
