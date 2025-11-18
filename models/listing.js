@@ -39,9 +39,15 @@ const listingSchema = new Schema({
       reviews : [
         {
           type : Schema.Types.ObjectId,
-          ref : "Review"  // name of reviews wala model
+          ref : "Review"  , // name of reviews wala model
         }
-      ]
+      ],
+
+      owner : {
+        type : Schema.Types.ObjectId,
+        ref : "User",
+      },
+
 });
 
 

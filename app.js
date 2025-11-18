@@ -104,22 +104,23 @@ app.get("/", (req, res) => {
 app.use((req, res, next) => {
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
+    res.locals.currUser = req.user;
     next();
 })
 
 
 
 // Demo user
-app.get("/demouser", async (req, res) => {
-    let fakeUser = new User({
-        email : "student@gmail.com",
-        username : "abcdNAME12"  
-    });
+// app.get("/demouser", async (req, res) => {
+//     let fakeUser = new User({
+//         email : "student@gmail.com",
+//         username : "abcdNAME12"  
+//     });
     
-    // static method register()
-    let registeredUser = await User.register(fakeUser, "password");
-    res.send(registeredUser);
-})
+//     // static method register()
+//     let registeredUser = await User.register(fakeUser, "password");
+//     res.send(registeredUser);
+// })
 
 
 

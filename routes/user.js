@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require("../models/user.js");
 const wrapAsync = require("../utilis/wrapAsync.js");
 const passport = require("passport");
-
+const {saveRedirectUrl} = require("../middleware.js")
 
 // Signup Get route
 router.get("/signup", (req, res) => {
@@ -21,8 +21,14 @@ router.post("/signup", wrapAsync (async (req, res) => {
         const registeredUser = await User.register(newUser, password);
 
         console.log(registeredUser);
-        req.flash("success", "Welcome to BanglaBatash-BNB!");
-        res.redirect("/listings");
+        req.login(registeredUser, (err) =>{
+            if (err) {
+                next(err);
+            }
+
+            req.flash("success", "Welcome to BanglaBatash-BNB!");
+            res.redirect("/listings");
+        })
        
     }
     catch(err){
@@ -43,7 +49,8 @@ router.get("/login", (req, res) => {
 
 // Login POST route
 router.post(
-    "/login", 
+    "/login",
+    saveRedirectUrl, 
     passport.authenticate("local", {
     failureRedirect : "/login",
     failureFlash : true,
@@ -51,8 +58,24 @@ router.post(
 
 async (req, res) => {
     req.flash("success", "Welcome back to BanglaBatash-BNB! ");
-    res.redirect("/listings")
+    let redirectUrl = res.locals.redirectUrl || "/listings" ;
+    res.redirect(redirectUrl);
 });
+
+
+
+// logout router
+router.get("/logout", (req, res) => {
+    req.logout((err) => {
+        if (err) {
+            return next(err);
+        }
+
+        req.flash("success" , "Logged out successfully.");
+        res.redirect("/listings");
+    })
+})
+
 
 
 module.exports = router;
