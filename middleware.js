@@ -1,4 +1,5 @@
 const Listing = require("./models/listing.js")
+const Review = require("./models/review.js");
 const ExpressError = require("./utilis/ExpressError.js");
 const {listingSchema, reviewSchema} = require("./schema.js");
 
@@ -34,6 +35,24 @@ module.exports.isOwner = async (req, res, next) => {
     }
     next();
 };
+
+
+
+module.exports.isReviewAuthor = async (req, res, next) => {
+
+  // Checking permission of the user to edit
+    let {id, reviewId} = req.params;
+    let review = await Review.findById(reviewId);
+    if (!review.author.equals(res.locals.currUser._id)) {
+         req.flash("error", "You don't have the permission to make changes to  this review.");
+         return res.redirect(`/listings/${id}`);
+    }
+    next();
+};
+
+
+
+
 
 
 
