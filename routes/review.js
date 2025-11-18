@@ -5,7 +5,7 @@ const wrapAsync = require("../utilis/wrapAsync.js")
 const ExpressError = require("../utilis/ExpressError.js")
 const {listingSchema, reviewSchema} = require("../schema.js")
 const Listing = require("../models/listing.js");
-const {isLoggedIn, isOwner, validateListing, validateReview} = require("../middleware.js");
+const {isLoggedIn, isOwner, validateListing, validateReview, isReviewAuthor} = require("../middleware.js");
 
 
 
@@ -13,9 +13,13 @@ const {isLoggedIn, isOwner, validateListing, validateReview} = require("../middl
 
 
 // Reviews er POST Route
-router.post("", validateReview, wrapAsync(async (req, res) => {
+router.post("", 
+    isLoggedIn,
+    validateReview, 
+    wrapAsync(async (req, res) => {
     let listing = await Listing.findById(req.params.id);
     let newReview = new Review(req.body.review);
+    newReview.author = req.user._id;
 
     listing.reviews.push(newReview);
 
@@ -30,7 +34,10 @@ router.post("", validateReview, wrapAsync(async (req, res) => {
 
 
 // Delete reviews route
-router.delete("/:reviewId", wrapAsync(async (req, res) => {
+router.delete("/:reviewId", 
+    isLoggedIn,
+    isReviewAuthor,
+    wrapAsync(async (req, res) => {
     let {id, reviewId} = req.params;
 
     await Listing.findByIdAndUpdate(id, {$pull : {reviews : reviewId}});
