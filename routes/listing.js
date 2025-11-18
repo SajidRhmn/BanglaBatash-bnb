@@ -6,7 +6,8 @@ const wrapAsync = require("../utilis/wrapAsync.js");
 // const {listingSchema, reviewSchema} = require("../schema.js");
 const {isLoggedIn, isOwner, validateListing, validateReview} = require("../middleware.js");
 const multer = require('multer');
-const upload = multer( {dest : 'uploads/'} );
+const {storage} = require("../cloudConfig.js")
+const upload = multer( {storage} );
 
 const listingController = require("../controllers/listings.js")
 
@@ -20,13 +21,11 @@ router.route("/")
     // 3. Create route - handle form submission
     .post(
         isLoggedIn,
+        upload.single('listing[image]'),
         validateListing,
         wrapAsync( listingController.createListing )
     );
 
-//     .post(upload.single('listing[image]'), (req, res) => {
-//     res.send(req.file);
-//   });
 
 
 
@@ -46,6 +45,7 @@ router.route("/:id")
     .put(
         isLoggedIn,
         isOwner,
+        upload.single("listing[image]"),
         validateListing,
         wrapAsync(listingController.updateListing) 
     )
