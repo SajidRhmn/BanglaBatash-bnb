@@ -1,10 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const Listing = require("../models/listing.js");
+// const Listing = require("../models/listing.js");
 const wrapAsync = require("../utilis/wrapAsync.js");
-const ExpressError = require("../utilis/ExpressError.js");
-const {listingSchema, reviewSchema} = require("../schema.js");
+// const ExpressError = require("../utilis/ExpressError.js");
+// const {listingSchema, reviewSchema} = require("../schema.js");
 const {isLoggedIn, isOwner, validateListing, validateReview} = require("../middleware.js");
+const multer = require('multer');
+const upload = multer( {dest : 'uploads/'} );
 
 const listingController = require("../controllers/listings.js")
 
@@ -22,9 +24,13 @@ router.route("/")
         wrapAsync( listingController.createListing )
     );
 
+//     .post(upload.single('listing[image]'), (req, res) => {
+//     res.send(req.file);
+//   });
 
 
-    
+
+
 // 2. New route - show form (MUST come before :id route)
 router.get("/new", isLoggedIn, listingController.renderNewForm)
 
