@@ -5,17 +5,10 @@ const wrapAsync = require("../utilis/wrapAsync.js")
 const ExpressError = require("../utilis/ExpressError.js")
 const {listingSchema, reviewSchema} = require("../schema.js")
 const Listing = require("../models/listing.js");
+const {isLoggedIn, isOwner, validateListing, validateReview} = require("../middleware.js");
 
 
-const validateReview = (req, res, next) => {
-    let { error } = reviewSchema.validate(req.body);
-    if (error) {
-        let errMsg = error.details.map((el) => el.message).join(","); // Note: The screenshot shows "," not ";"
-        throw new ExpressError(400, errMsg);
-    } else {
-        next();
-    }
-};
+
 
 
 

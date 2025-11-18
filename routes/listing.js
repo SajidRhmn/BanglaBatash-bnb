@@ -4,24 +4,16 @@ const Listing = require("../models/listing.js");
 const wrapAsync = require("../utilis/wrapAsync.js");
 const ExpressError = require("../utilis/ExpressError.js");
 const {listingSchema, reviewSchema} = require("../schema.js");
-const {isLoggedIn} = require("../middleware.js");
+const {isLoggedIn, isOwner, validateListing, validateReview} = require("../middleware.js");
 
-const validateListing = (req, res, next) => {
-    let { error } = listingSchema.validate(req.body);
-    if (error) {
-        let errMsg = error.details.map((el) => el.message).join(","); // Note: The screenshot shows "," not ";"
-        throw new ExpressError(400, errMsg);
-    } else {
-        next();
-    }
-};
+
 
 
 
 // Index route - show all listings
 router.get("/", async (req, res) => {
     let allListings = await Listing.find({});
-    console.log(allListings)
+    //console.log(allListings)
     res.render("listing.ejs", {allListings});
 })
 
@@ -82,7 +74,10 @@ router.post(
 
 
 // Update - Edit Route
-router.get("/:id/edit", isLoggedIn, async (req, res) => {
+router.get("/:id/edit", 
+    isLoggedIn, 
+    isOwner,
+    async (req, res) => {
     
 
     let {id} = req.params;
@@ -99,20 +94,26 @@ router.get("/:id/edit", isLoggedIn, async (req, res) => {
 // Update - Put req route for edit 
 router.put("/:id", 
     isLoggedIn,
+    isOwner,
     validateListing,
     wrapAsync(async (req, res) => {
 
     let {id} = req.params; 
+  
     await Listing.findByIdAndUpdate(id, {...req.body.listing});
 
     req.flash("success", "Listing Updated!");
-    res.redirect("/listings");
+    res.redirect(`/listings/${id}`);
 
 }));
 
 
 // Delete route
-router.delete("/:id", isLoggedIn, async (req, res) => {
+router.delete("/:id", 
+    isLoggedIn, 
+    isOwner,
+
+    async (req, res) => {
     let {id} = req.params;
     let deletedListing = await Listing.findByIdAndDelete(id);
     console.log(deletedListing);
