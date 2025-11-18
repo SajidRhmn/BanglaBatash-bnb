@@ -29,6 +29,12 @@ module.exports.isOwner = async (req, res, next) => {
   // Checking permission of the user to edit
     let {id} = req.params;
     let listing = await Listing.findById(id);
+
+    if (!listing) {
+        req.flash("error", "Listing not found!");
+        return res.redirect("/listings");
+    }
+
     if (!listing.owner.equals(res.locals.currUser._id)) {
          req.flash("error", "You don't have the permission to make changes to  this listing.");
          return res.redirect(`/listings/${id}`);
@@ -43,6 +49,12 @@ module.exports.isReviewAuthor = async (req, res, next) => {
   // Checking permission of the user to edit
     let {id, reviewId} = req.params;
     let review = await Review.findById(reviewId);
+
+    if (!review) {
+        req.flash("error", "Review not found!");
+        return res.redirect(`/listings/${id}`);
+    }
+
     if (!review.author.equals(res.locals.currUser._id)) {
          req.flash("error", "You don't have the permission to make changes to  this review.");
          return res.redirect(`/listings/${id}`);

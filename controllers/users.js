@@ -1,0 +1,66 @@
+const Review = require("../models/review.js");
+const Listing = require("../models/listing.js");
+const User = require("../models/user.js");
+
+
+
+// Signup Get route
+module.exports.renderSignupForm = (req, res) => {
+    res.render("users/signup.ejs");
+};
+
+
+// signup post route
+module.exports.signUp = (async (req, res) => {
+    try{
+        let {username, email, password} = req.body;
+        const newUser = new User({email, username});
+        const registeredUser = await User.register(newUser, password);
+
+        console.log(registeredUser);
+        req.login(registeredUser, (err) =>{
+            if (err) {
+                next(err);
+            }
+
+            req.flash("success", "Welcome to BanglaBatash-BNB!");
+            res.redirect("/listings");
+        })
+       
+    }
+    catch(err){
+        req.flash("error", err.message);
+        res.redirect("/signup")
+    }
+
+});
+
+
+
+//  login Get route
+module.exports.renderLoginForm =  (req, res) => {
+    res.render("users/login.ejs")
+};
+
+
+
+// Login POST route
+module.exports.loginRoute = async (req, res) => {
+    req.flash("success", "Welcome back to BanglaBatash-BNB! ");
+    let redirectUrl = res.locals.redirectUrl || "/listings" ;
+    res.redirect(redirectUrl);
+}
+
+
+
+// logout router
+module.exports.logoutRoute = (req, res) => {
+    req.logout((err) => {
+        if (err) {
+            return next(err);
+        }
+
+        req.flash("success" , "Logged out successfully.");
+        res.redirect("/listings");
+    })
+}
