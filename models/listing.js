@@ -15,12 +15,8 @@ const listingSchema = new Schema({
       },
 
       image : {
-        type: String,
-        default: "https://www.morebusiness.com/wp-content/uploads/2016/02/free-stock-photos.jpg",
-        set: (v) =>
-          v === ""
-            ? "https://www.morebusiness.com/wp-content/uploads/2016/02/free-stock-photos.jpg"
-            : v,
+         url : String, 
+         filename : String
       },
 
       price : {
