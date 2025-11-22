@@ -11,6 +11,7 @@ const wrapAsync = require("./utilis/wrapAsync.js");
 const ExpressError = require("./utilis/ExpressError.js");
 const {listingSchema, reviewSchema} = require("./schema.js");
 const session = require("express-session");
+const MongoStore = require("connect-mongo")
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
@@ -30,15 +31,32 @@ app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
 
 
+// mongoose startup
+// const MONGO_URL = 'mongodb://127.0.0.1:27017/BanglaBatash_BNB';
+const dbUrl = process.env.ATLASDB_URL
+
+const store = MongoStore.create({
+    mongoUrl: dbUrl,
+    // crypto: {
+    //     secret: "mysupersecretcode",
+    // },
+    touchAfter: 24 * 3600, // 24 hours in seconds
+});
+
+store.on("error" , (err) => {
+    console.log("Error in MONGO SESSION STORE", err);
+});
+
 
 // Session options
 const sessionOptions = {
-    secret : "mysupersecretcode" ,
+    store,
+    secret : process.env.SECRET ,
     resave : false,
     saveUninitialized : true,
     cookie : {
-       expires : Date.now() + 7*24*60*60*100, //7days,24hours,60min,60sec,1000ms.
-       maxAge : 7*24*60*60*100,
+       expires : Date.now() + 7*24*60*60*1000, //7days,24hours,60min,60sec,1000ms.
+       maxAge : 7*24*60*60*1000,
        httpOnly : true  // to prevent cross-scripting attacks
     }
 };
@@ -59,8 +77,7 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 
-// mongoose startup
-const MONGO_URL = 'mongodb://127.0.0.1:27017/BanglaBatash_BNB';
+
 
 main()
    .then(() => {
@@ -69,19 +86,9 @@ main()
     .catch(err => console.log(err));
 
 async function main() {
-  await mongoose.connect(MONGO_URL);
+  await mongoose.connect(dbUrl);
 }
 
-
-
-
-
-
-
-
-app.get("/", (req, res) => {
-    res.send("Working home er get root")
-})
 
 
 // Sample data insersion 
@@ -140,6 +147,10 @@ app.use((req, res, next) => {
 
 
 app.use((err, req, res, next) => {
+    // If headers already sent, delegate to Express's default error handler
+    if (res.headersSent) {
+        return next(err);
+    }
     let { statusCode = 500, message = "Something went wrong!" } = err;
     // res.status(statusCode).send(message);
     res.status(statusCode).render("error.ejs", {err})

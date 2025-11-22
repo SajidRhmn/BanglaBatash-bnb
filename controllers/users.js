@@ -11,7 +11,7 @@ module.exports.renderSignupForm = (req, res) => {
 
 
 // signup post route
-module.exports.signUp = (async (req, res) => {
+module.exports.signUp = (async (req, res, next) => {
     try{
         let {username, email, password} = req.body;
         const newUser = new User({email, username});
@@ -54,7 +54,7 @@ module.exports.loginRoute = async (req, res) => {
 
 
 // logout router
-module.exports.logoutRoute = (req, res) => {
+module.exports.logoutRoute = (req, res, next) => {
     req.logout((err) => {
         if (err) {
             return next(err);

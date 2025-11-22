@@ -19,6 +19,7 @@ module.exports.createReview = async (req, res) => {
 }
 
 
+// // Delete reviews route
 module.exports.destroyReview = async (req, res) => {
     let {id, reviewId} = req.params;
 
