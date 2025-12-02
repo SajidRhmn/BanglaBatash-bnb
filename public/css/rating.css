@@ -9,7 +9,7 @@
   filter: hue-rotate(-30deg) saturate(1.5) brightness(1.1);
 }
 
-/* Responsive sizing */
+/* Responsive sizing - only use 16px for mobile to maintain sprite alignment */
 @media (max-width: 576px) {
   .starability-result {
     width: 80px;
