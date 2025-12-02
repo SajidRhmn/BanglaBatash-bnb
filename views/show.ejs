@@ -23,7 +23,7 @@
                     
                     <p class="card-text"><%= listing.description %></p>
                     
-                    <p class="card-text">&#8377; <%= listing.price.toLocaleString("en-IN") %></p>
+                    <p class="card-text">&#2547; <%= listing.price.toLocaleString("en-US") %></p>
                     
                     <p class="card-text"><%= listing.location %></p>
                     
@@ -42,7 +42,6 @@
             <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
                 <button class="btn btn-dark del-btn offset-2">Delete</button>
             </form>
-            </div>
             </div>
             <% } %>
 
@@ -141,6 +140,7 @@
          </div>
     </div>
 
+</div>
 </div>
 
 

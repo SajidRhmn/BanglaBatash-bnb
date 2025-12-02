@@ -192,6 +192,46 @@ footer {
   height: 18rem;
 }
 
+/* Responsive Card Images for Mobile */
+@media (max-width: 576px) {
+  .card-img-top {
+    height: 20rem !important;
+    object-fit: cover !important;
+    width: 100% !important;
+  }
+
+  .listing-card {
+    margin-bottom: 1.5rem !important;
+    max-width: 100% !important;
+  }
+
+  .col {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    width: 100% !important;
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+/* Extra small devices (phones under 400px) */
+@media (max-width: 400px) {
+  .card-img-top {
+    height: 18rem !important;
+  }
+
+  .col {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+}
+
+@media (max-width: 768px) and (min-width: 577px) {
+  .card-img-top {
+    height: 18rem !important;
+  }
+}
+
 /* Card Body (Content Area) Styling */
 .card-body {
   padding: 0 !important;             /* Remove all padding inside card body */
@@ -222,9 +262,10 @@ footer {
 /*Show page*/
 
 .show-img{
-  height: 40vh;
-  width: 20vh;
-  
+  height: auto;
+  max-height: 60vh;
+  width: 100%;
+  object-fit: cover;
 }
 
 .btns{
@@ -356,5 +397,5 @@ footer {
 }
 
 .tax-info {
-    display: inline;
+    display: none;
 }
